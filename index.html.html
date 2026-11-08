@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Matrice d'Itération et d'Optimisation</title>
+    <style>
+        /* Importation de polices très élégantes et professionnelles */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+        
+        :root {
+            --bg-color: #faf9f6; /* Off-white / paper texture feel */
+            --card-bg: #ffffff;
+            --text-main: #2c3e50; /* Deep elegant slate */
+            --text-muted: #5e6d7d;
+            --accent: #8e7d5f; /* Elegant muted gold/bronze */
+            --accent-hover: #6d5e44;
+            --border-light: #eae3d9;
+            --gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            line-height: 1.7; 
+            padding: 4rem 2rem; 
+        }
+
+        .container { 
+            max-width: 1300px; 
+            margin: 0 auto; 
+            background: var(--card-bg); 
+            padding: 4rem; 
+            border-radius: 12px; /* More subtle rounding */
+            box-shadow: 0 25px 50px rgba(0,0,0,0.03), 0 5px 15px rgba(0,0,0,0.02); 
+            border: 1px solid var(--border-light);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
+            margin: 2rem auto 0;
+        }
+
+        h1 { 
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            font-size: 1.35rem;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            background: var(--card-bg);
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            text-align: left;
+        }
+
+        th, td { 
+            padding: 1.5rem; 
+            border-bottom: 1px solid var(--border-light); 
+        }
+
+        th { 
+            background-color: #fcfcfc; 
+            color: var(--text-main); 
+            font-family: 'Playfair Display', serif;
+            font-weight: 700; 
+            text-transform: uppercase; 
+            font-size: 0.85rem; 
+            letter-spacing: 0.08em;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td { 
+            background-color: #fdfdfd; 
+            transition: background-color 0.3s ease;
+        }
+
+        .iteration { 
+            font-family: 'Playfair Display', serif;
+            font-weight: 700; 
+            color: var(--accent); 
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .prompt { 
+            font-style: italic; 
+            color: var(--text-muted); 
+            font-weight: 400;
+            font-size: 0.95rem;
+        }
+
+        .action {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .files-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .download-btn { 
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #ffffff; 
+            color: var(--text-main); 
+            padding: 0.6rem 1rem; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #d1d9e0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .download-btn:hover { 
+            background: var(--text-main); 
+            color: #ffffff;
+            border-color: var(--text-main);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(44, 62, 80, 0.15);
+        }
+
+        .download-btn.updated {
+            background: #fffcf8;
+            color: #9c6c29;
+            border-color: #eeddbb;
+        }
+        
+        .download-btn.updated:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 8px 15px rgba(142, 125, 95, 0.2);
+        }
+        
+        .download-btn.original {
+            background: #f8f9fa;
+            color: #6c757d;
+            border-color: #dee2e6;
+        }
+        
+        .download-btn.original:hover {
+            background: #6c757d;
+            color: white;
+            border-color: #6c757d;
+            box-shadow: 0 8px 15px rgba(108, 117, 125, 0.2);
+        }
+        
+        .download-btn.image-btn {
+            background: #fdfaf5;
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .download-btn.image-btn:hover {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 8px 15px rgba(142, 125, 95, 0.25);
+        }
+
+        .download-icon {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Matrice d'Itération et d'Optimisation</h1>
+            <div class="subtitle">Conception et Design de Templates CV Logistique</div>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 5%; text-align: center;">#</th>
+                        <th style="width: 35%;">Prompt Utilisateur (Verbatim)</th>
+                        <th style="width: 30%;">Traitement / Action</th>
+                        <th style="width: 30%;">Livrables (Téléchargement)</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td class="iteration">1</td>
+                        <td class="prompt">"Génère un CV brut : Choisis un nom, une adresse de ton gré. Le poste recherché est préparateur de commandes."</td>
+                        <td class="action">Création d'un CV textuel pour le profil 'Laurent Mercier'.</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">2</td>
+                        <td class="prompt">"Transforme le CV brut en CV design."</td>
+                        <td class="action">Génération d'un premier document PDF.</td>
+                        <td><div class="files-grid"><a href="CV Laurent Mercier.pdf" download="CV Laurent Mercier.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV Laurent Mercier</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">3</td>
+                        <td class="prompt">"Note : Un CV professionnel n'excède jamais une page."</td>
+                        <td class="action">Intégration de la contrainte dimensionnelle (A4, 1 page).</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">4</td>
+                        <td class="prompt">"Effectue les modifications."</td>
+                        <td class="action">Ajustement du code et régénération du PDF pour forcer l'affichage sur une page unique.</td>
+                        <td><div class="files-grid"><a href="CV Laurent Mercier.pdf" download="CV Laurent Mercier.pdf" class="download-btn updated"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV Laurent Mercier (Ajusté)</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">5</td>
+                        <td class="prompt">"Le CV tient à présent sur une page ✓."</td>
+                        <td class="action">Validation de l'état du document.</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">6</td>
+                        <td class="prompt">"Peux-tu imaginer les différents templates à designer pour le CV brut ?"</td>
+                        <td class="action">Proposition d'un tableau initial de 4 configurations de templates.</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">7</td>
+                        <td class="prompt">"OK. Un total de quatre templates. Peux-tu en ajouter deux autres ?"</td>
+                        <td class="action">Ajout de 2 nouveaux templates (Métrique, Minimaliste).</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">8</td>
+                        <td class="prompt">"Mets donc à jour le tableau de configuration de templates."</td>
+                        <td class="action">Consolidation du tableau avec 6 templates.</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">9</td>
+                        <td class="prompt">"Tu peux à présent passer chaque CV design en fonction du tableau de configuration."</td>
+                        <td class="action">Définition des spécifications structurelles (CSS, typo, visuels) pour les 6 templates.</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">10</td>
+                        <td class="prompt">"Bien !! Construis chaque CV design."</td>
+                        <td class="action">Génération par lots des 6 documents PDF correspondants.</td>
+                        <td><div class="files-grid"><a href="CV 1 - Standard ATS.pdf" download="CV 1 - Standard ATS.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 1 - Standard ATS</a><a href="CV 2 - Modulaire Bicolore.pdf" download="CV 2 - Modulaire Bicolore.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 2 - Modulaire Bicolore</a><a href="CV 3 - Axe Temporel (Original).pdf" download="CV 3 - Axe Temporel (Original).pdf" class="download-btn original"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 3 - Axe Temporel (Original)</a><a href="CV 4 - Blocs Techniques.pdf" download="CV 4 - Blocs Techniques.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 4 - Blocs Techniques</a><a href="CV 5 - Métrique Performance.pdf" download="CV 5 - Métrique Performance.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 5 - Métrique Performance</a><a href="CV 6 - Minimaliste.pdf" download="CV 6 - Minimaliste.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 6 - Minimaliste</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">11</td>
+                        <td class="prompt">"1. Ajoute deux nouveaux templates au tableau de configuration ; 2. Construis le CV design de chaque."</td>
+                        <td class="action">Ajout et génération de 2 templates (Créatif, Corporate).</td>
+                        <td><div class="files-grid"><a href="CV 7 - Créatif Infographique (Original).pdf" download="CV 7 - Créatif Infographique (Original).pdf" class="download-btn original"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 7 - Créatif Infographique (Original)</a><a href="CV 8 - Corporate Exécutif.pdf" download="CV 8 - Corporate Exécutif.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 8 - Corporate Exécutif</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">12</td>
+                        <td class="prompt">"1. Ajoute encore deux nouveaux templates au tableau de configuration ; 2. Construis le CV design de chaque."</td>
+                        <td class="action">Ajout et génération de 2 templates (Brutaliste, Portfolio).</td>
+                        <td><div class="files-grid"><a href="CV 9 - Brutaliste Typographique.pdf" download="CV 9 - Brutaliste Typographique.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 9 - Brutaliste Typographique</a><a href="CV 10 - Portfolio Cartes (Original).pdf" download="CV 10 - Portfolio Cartes (Original).pdf" class="download-btn original"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 10 - Portfolio Cartes (Original)</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">13</td>
+                        <td class="prompt">"Même exercice."</td>
+                        <td class="action">Ajout et génération de 2 templates (Dark Mode, Écologique).</td>
+                        <td><div class="files-grid"><a href="CV 11 - Dark Mode Terminal.pdf" download="CV 11 - Dark Mode Terminal.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 11 - Dark Mode Terminal</a><a href="CV 12 - Écologique RSE.pdf" download="CV 12 - Écologique RSE.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 12 - Écologique RSE</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">14</td>
+                        <td class="prompt">"1. Ajoute un dernier nouveau template au tableau de configuration ; 2. Construis le CV design."</td>
+                        <td class="action">Ajout et génération de 1 template final (Industriel).</td>
+                        <td><div class="files-grid"><a href="CV 13 - Industriel Signaletique.pdf" download="CV 13 - Industriel Signaletique.pdf" class="download-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 13 - Industriel Signaletique</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">15</td>
+                        <td class="prompt">"OK. Exercice terminé."</td>
+                        <td class="action">Clôture de la phase de création de templates.</td>
+                        <td></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">16</td>
+                        <td class="prompt">"Exercice 2 : évalue la pertinence de chaque template construit."</td>
+                        <td class="action">Élaboration d'une matrice d'évaluation (Pertinence, Analyse clinique).</td>
+                        <td><div class="files-grid"><a href="Matrice_Evaluation.png" download="Matrice_Evaluation.png" class="download-btn image-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Matrice d'Évaluation (.png)</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">17</td>
+                        <td class="prompt">"OK. Exercice 3 : pour chaque template dont la pertinence est basse, propose une solution optimale."</td>
+                        <td class="action">Recommandation d'optimisations ou réaffectations pour 7 templates.</td>
+                        <td><div class="files-grid"><a href="Matrice_Optimisation.png" download="Matrice_Optimisation.png" class="download-btn image-btn"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Matrice d'Optimisation (.png)</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">18</td>
+                        <td class="prompt">"OK. Applique la solution d'optimisation mentionnée pour les templates suivants : Axe temporel, Créatif / Infographique, Portfolio / Cartes."</td>
+                        <td class="action">Modification structurelle et régénération des 3 PDF ciblés.</td>
+                        <td><div class="files-grid"><a href="CV 3 - Axe Temporel (Optimisé).pdf" download="CV 3 - Axe Temporel (Optimisé).pdf" class="download-btn updated"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 3 - Axe Temporel (Optimisé)</a><a href="CV 7 - Créatif Infographique (Optimisé).pdf" download="CV 7 - Créatif Infographique (Optimisé).pdf" class="download-btn updated"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 7 - Créatif Infographique (Optimisé)</a><a href="CV 10 - Portfolio Cartes (Optimisé).pdf" download="CV 10 - Portfolio Cartes (Optimisé).pdf" class="download-btn updated"><svg class="download-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> CV 10 - Portfolio Cartes (Optimisé)</a></div></td>
+                    </tr>
+    
+                    <tr>
+                        <td class="iteration">19</td>
+                        <td class="prompt">"Exercice terminé. Bon travail !"</td>
+                        <td class="action">Confirmation de la clôture des exercices d'optimisation.</td>
+                        <td></td>
+                    </tr>
+    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
